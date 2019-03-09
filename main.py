@@ -8,6 +8,3 @@ from evaluate_expression import evaluate_expression
 @click.option('-x', help='The input vector')
 def q1(expr, n, x):
     print(evaluate_expression(expr, x))
-
-
-
