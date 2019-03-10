@@ -41,18 +41,22 @@ test_cases = {
     # Check this doesn't cause a TypeError (pow() can create complex numbers).
     ("(data (add (div (data 6) (diff (max (sqrt 5) (avg (avg 8 3) 2)) 4)) (pow (diff (avg (avg (mul (data 3) 6) 0) ("
      "sqrt 1)) (diff 8 (exp 3))) (add (avg 2 (data 6)) (avg (pow (mul (ifleq 5 2 (data 8) 3) (ifleq 2 3 5 7)) (log "
-     "0)) (div (data (log 7)) (pow 3 6)))))))", "0 1 2 3 4 5 6 7 8 9"): 7,
+     "0)) (div (data (log 7)) (pow 3 6)))))))", "0 1 2 3 4 5 6 7 8 9"): 6,
 
     # Check this actually completes.
     ("(add (ifleq (add 8 32) (ifleq 82 (pow (data (exp (div 73 56))) (max (ifleq 13 12 12 (add 32 12)) 97)) (sqrt ("
      "log 82)) 91) (max 51 (diff (ifleq 64 (mul 36 20) (pow (ifleq 78 7 (add (data (data 95)) 29) 95) (sqrt (data "
      "2))) (data 50)) (diff (div 98 (sub 57 15)) (pow (exp 92) 21)))) (diff (div (div 42 (max (sqrt 17) (diff 79 "
      "32))) (pow (max 74 86) (ifleq 75 65 (max 42 (diff 25 4)) 77))) (exp (sqrt 89)))) (sqrt (sub (max (pow 7 (sub ("
-     "pow 63 46) 71)) 27) (exp 98))))", ' '.join(map(str, range(100)))): 0
+     "pow 63 46) 71)) 27) (exp 98))))", ' '.join(map(str, range(100)))): 56.19615242270663,
+
+    # Check this isn't complex.
+    ("(pow (ifleq (mul (exp (mul (log (diff 4 2)) (data 1))) 3) (pow (sub (diff (pow 1 2) (exp 0)) 0) 2) (sub (sub ("
+     "sub 0 3) (exp (pow (max 4 2) (exp 3)))) (add 4 (div (diff 0 0) (log 3)))) (sub 3 (exp 2))) (div (add (add (exp "
+     "(sqrt 0)) (add 0 1)) (diff (avg (sqrt 4) 2) (mul (pow (exp (ifleq 4 4 3 0)) 0) 4))) 3))", "2 2 2 2 2"): 0
 }
 
 
 def test_all_functions():
     for (expression, input_vector), result in test_cases.items():
-        result = Tree(expression).evaluate(input_vector)
         assert Tree(expression).evaluate(input_vector) == result

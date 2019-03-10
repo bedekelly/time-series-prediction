@@ -8,7 +8,13 @@ class Tree:
     def __init__(self, expression):
         if type(expression) is str:
             expression = parse(expression)
+
+        # self._expression is either an integer or an expression-list.
+
         self._expression = expression
+        assert type(self._expression) in (int, list)
+        self._length = self._calculate_length()
+        self._string = self._calculate_string()
 
     def evaluate(self, input_vector=None):
         """
@@ -39,7 +45,7 @@ class Tree:
 
         raise ValueError("Invalid function: ", fun_key)
 
-    def __len__(self):
+    def _calculate_length(self):
         """
         Calculate the number of nodes in this tree.
         :return: The number of nodes in the tree.
@@ -48,7 +54,7 @@ class Tree:
             return 1
         return 1 + sum(len(param) for param in self._expression[1:])
 
-    def __str__(self):
+    def _calculate_string(self):
         """
         Display an expression like ["mul", 2, 3] as (mul 2 3).
         :return: A formatted string representation of this tree.
@@ -56,6 +62,12 @@ class Tree:
         if type(self._expression) == int:
             return str(self._expression)
         return f"({self._expression[0]} {' '.join(map(str, self._expression[1:]))})"
+
+    def __len__(self):
+        return self._length
+
+    def __str__(self):
+        return self._string
 
     def subtree_at(self, index):
         """

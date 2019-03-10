@@ -9,10 +9,11 @@ def _safety_harness(function):
         result = 0
         try:
             result = function(*args, **kwargs)
-            if math.isnan(result):
+            if isinstance(result, complex):
+                result = 0
+            if result > 2**16:
                 result = 0
         except (ZeroDivisionError, ValueError, OverflowError, TypeError) as e:
-            # print("Caught error:", e)
             pass
         return result
 

@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from lab.evaluate_fitness import evaluate_fitness_against_data
+from lab.tree import Tree
 
 
 def test_simple_fitness_evaluation():
@@ -8,8 +9,8 @@ def test_simple_fitness_evaluation():
         ((), 5),
         ((1.0, 3.0), 5)
     ])
-    assert evaluate_fitness_against_data("(add 2 3)", training_data) == 0
-    assert evaluate_fitness_against_data("(add 4 4)", training_data) == 9
+    assert evaluate_fitness_against_data(Tree("(add 2 3)"), training_data) == 0
+    assert evaluate_fitness_against_data(Tree("(add 4 4)"), training_data) == 9
 
 
 def test_data_fitness_evaluation():
@@ -25,4 +26,4 @@ def test_data_fitness_evaluation():
     ]
 
     for expression, result in tests:
-        assert evaluate_fitness_against_data(expression, training_data) == result
+        assert evaluate_fitness_against_data(Tree(expression), training_data) == result

@@ -2,16 +2,13 @@ import csv
 from statistics import mean
 from collections import OrderedDict
 
-from lab.tree import Tree
-
 
 def mean_square_error(seq1, seq2):
     return mean((a - b) ** 2 for a, b in zip(seq1, seq2))
 
 
 def evaluate_fitness_against_data(expression, training_data):
-    evaluate = Tree(expression).evaluate
-    calculated_results = (evaluate(input_vector) for input_vector in training_data)
+    calculated_results = [expression.evaluate(input_vector) for input_vector in training_data]
     target_results = training_data.values()
     return mean_square_error(calculated_results, target_results)
 
