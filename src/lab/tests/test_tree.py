@@ -55,6 +55,13 @@ def test_tree_height():
     assert Tree("(mul (add 1 2) (sub (div 8 2) 4))").height == 3
     assert Tree(1).height == 0
 
+
+def test_tree_equality():
+    assert Tree(1) == Tree(1)
+    assert Tree("(mul 1 2)") == Tree("(mul 1 2)")
+    assert Tree("(mul 1 2)") != Tree ("(mul (add 1 2) 2)")
+
+
 if __name__ == "__main__":
     test_expression_length()
     test_subtree_at()

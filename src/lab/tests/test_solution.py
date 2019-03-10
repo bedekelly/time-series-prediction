@@ -21,11 +21,11 @@ def test_evaluate_solution_fitness():
 
 
 def test_mutate_solution():
-    expr = "(add (mul 2 3) (sub 5 4))"
+    expr = "(add (mul 1 2) (sub 3 4))"
     solution = Solution(expr)
-    new_solution = solution.mutate()
-    assert str(solution) != str(new_solution)
-    print(new_solution)
+    for _ in range(10000):
+        new_solution = solution.mutate()
+        assert str(solution) != str(new_solution)
 
 
 if __name__ == "__main__":

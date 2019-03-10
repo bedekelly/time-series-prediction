@@ -17,10 +17,10 @@ def random_function():
 
 
 def create_random_node(depth=0, max_depth=MAX_DEPTH):
-    if random.random() < depth / max_depth:
-        return Tree(random_number(max_depth))
+    if max_depth == 0 or random.random() < depth / max_depth:
+        return Tree(random_number(MAX_DEPTH))
     name, (_, arity) = random_function()
-    return Tree([name, *create_random_nodes(arity, depth + 1)])
+    return Tree([name, *create_random_nodes(arity, depth + 1, max_depth)])
 
 
 def create_random_nodes(num_nodes, depth=0, max_depth=MAX_DEPTH):

@@ -37,8 +37,12 @@ class Solution:
 
         # Create a random node with an appropriate max-depth.
         max_possible_depth = MAX_DEPTH - node_depth
-        max_depth = max(subtree.height * 2, MAX_DEPTH - node_depth)
-        random_tree = create_random_node(max_depth=max_depth)
+        max_depth = min(subtree.height * 2, MAX_DEPTH - node_depth)
+
+        # Mutate until the node has actually changed. (Randomness sometimes repeats!)
+        while True:
+            random_tree = create_random_node(max_depth=max_depth)
+            if random_tree != subtree: break
 
         # Replace initial node with the one we've created in a new tree
         new_tree = self.expression_tree.replace_subtree_at(random_index, random_tree)
