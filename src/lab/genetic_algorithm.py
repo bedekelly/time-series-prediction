@@ -16,17 +16,16 @@ def breed(parents, mutation_crossover_ratio=1):
     """
     children = []
     random.shuffle(parents)
-    num_children = len(parents)-1
+    num_children = len(parents) - 1
 
     while num_children:
         if num_children == 1 or random.random() < mutation_crossover_ratio:
-            print(num_children, parents)
             parent = parents[num_children]
             child = parent.mutate()
             children.append(child)
             num_children -= 1
         else:
-            parent1, parent2 = parents[num_children], parents[num_children-1]
+            parent1, parent2 = parents[num_children], parents[num_children - 1]
             new_children = parent1.crossover(parent2)
             children.extend(new_children)
             num_children -= 2
@@ -46,7 +45,7 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_p
     :return: The population of the final generation.
     """
     population = generate_random_solutions(pop_size, input_size)
-    num_children = num_parents = int(input_size * num_parents)
+    num_children = num_parents = int(pop_size * num_parents)
 
     for solution in population:
         solution.evaluate_fitness_against(training)
@@ -68,11 +67,15 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_p
     return population
 
 
-def test_genetic_algorithm():
+def test_genetic_algorithm(tests=1):
     training_data = load_training_data("src/lab/data1.dat")
-    solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=1, training=training_data)
-    for solution in solutions:
-        print(solution)
+
+    print("[", end='')
+    for _ in range(tests):
+        solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=1, training=training_data)
+        print(".", end='')
+    print("]", end='')
 
 
-test_genetic_algorithm()
+if __name__ == "__main__":
+    test_genetic_algorithm(1)

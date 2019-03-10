@@ -8,11 +8,12 @@ class Tree:
     def __init__(self, expression):
         if type(expression) is str:
             expression = parse(expression)
-
-        # self._expression is either an integer or an expression-list.
-
         self._expression = expression
-        assert type(self._expression) in (int, list)
+        self._length = None
+        self._string = None
+        self.update_info()
+
+    def update_info(self):
         self._length = self._calculate_length()
         self._string = self._calculate_string()
 
@@ -69,11 +70,66 @@ class Tree:
     def __str__(self):
         return self._string
 
-    def subtree_at(self, index):
+    def replace_subtree_at(self, index, new_subtree):
+        """
+        Replace a node with a new subtree.
+        :param index: The index of the node to replace.
+        :param new_subtree: The new node to replace it with.
+        :return: A tree with the solution replaced.
+        """
+
+        # Check the index is actually in this tree.
+        if index >= self._length:
+            raise IndexError(f"Index out of bounds: {index} (max {self._length - 1})")
+
+        # If we're replacing the whole tree, do it here.
+        if index == 0:
+            return new_subtree
+
+        # Count the current node.
+        index -= 1
+
+        # Build a new expression list, recursively replacing the subtree once.
+        new_expression_list = [self._expression[0]]
+        found = False
+        for subtree in self._expression[1:]:
+            if not found and index < len(subtree):
+                found = True
+                subtree = subtree.replace_subtree_at(index, new_subtree)
+            else:
+                index -= len(subtree)
+            new_expression_list.append(subtree)
+
+        return Tree(new_expression_list)
+
+    def subtree_at(self, index, _depth=0):
         """
         Return the subtree (and depth of that subtree) at an index.
         The index refers to a depth-first search of the subtree.
         :param index: The index of the node to find.
+        :param _depth: The depth of the current node.
         :return: A tuple of (depth of node, node at index).
         """
-        return 0, self._expression
+
+        # Check the index is actually in this tree.
+        if index >= self._length:
+            raise IndexError(f"Index out of bounds: {index} (max {self._length - 1})")
+
+        # An index of 0 means the root node.
+        if index == 0:
+            return _depth, self
+
+        # Count the current node.
+        index -= 1
+
+        # Look for the tree that the index will be in.
+        for tree in self._expression[1:]:
+            if index < len(tree):
+                depth, subtree = tree.subtree_at(index, _depth + 1)
+                break
+            else:
+                index -= len(tree)
+        else:
+            raise IndexError("Got to the end without finding it!")
+
+        return depth, subtree

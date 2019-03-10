@@ -1,7 +1,7 @@
 from random import randrange
 
 from lab.evaluate_fitness import evaluate_fitness_against_data
-from lab.parsing import parse
+
 from lab.tree import Tree
 
 
@@ -22,18 +22,27 @@ class Solution:
         self.fitness = evaluate_fitness_against_data(self.expression_tree, training_data)
         return self.fitness
 
-    # def subtree_at(self, index):
-    #     return subtree_at(self.expression_tree, index)
-
     def mutate(self):
         """
         Return a mutated version of this solution.
         :return: A mutated solution.
         """
-        random_index = randrange(len(self.expression_tree))
-        node, height = self.expression_tree.subtree_at(random_index)
 
-        # Create a random node with max_depth=(max_depth-height)
+        # Prevent circular imports.
+        from lab.generation import create_random_node, MAX_DEPTH
+
+        # Pick a random node and get its depth.
+        random_index = randrange(len(self.expression_tree))
+        _, node_depth = self.expression_tree.subtree_at(random_index)
+
+        # Create a random node with an appropriate max-depth.
+        max_depth = MAX_DEPTH - node_depth
+        create_random_node(max_depth=max_depth)
+
         # Replace initial node with the one we've created in a new tree
+
         # Create & return a Solution with that tree
-        return 1
+        pass
+
+    def crossover(self, other):
+        raise NotImplemented("Crossover doesn't work yet!")
