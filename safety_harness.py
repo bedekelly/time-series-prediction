@@ -1,7 +1,9 @@
 import math
 
+from function import Function
 
-def safety_harness(function):
+
+def _safety_harness(function):
 
     def safe_function(*args, **kwargs):
         result = 0
@@ -9,8 +11,13 @@ def safety_harness(function):
             result = function(*args, **kwargs)
             if math.isnan(result):
                 result = 0
-        except (ZeroDivisionError, ValueError):
+        except (ZeroDivisionError, ValueError, OverflowError, TypeError) as e:
+            # print("Caught error:", e)
             pass
         return result
 
     return safe_function
+
+
+def safety_harness(function):
+    return Function(_safety_harness(function.fun), function.arity)
