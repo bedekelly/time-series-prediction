@@ -2,8 +2,7 @@ import csv
 from statistics import mean
 from collections import OrderedDict
 
-from lab.evaluate_expression import evaluate_expression
-from lab.evaluate_tree import evaluate_tree
+from lab.tree import Tree
 
 
 def mean_square_error(seq1, seq2):
@@ -11,15 +10,14 @@ def mean_square_error(seq1, seq2):
 
 
 def evaluate_fitness_against_data(expression, training_data):
-    eval_function = evaluate_expression if type(expression) == str else evaluate_tree
-    calculated_results = (eval_function(expression, input_vector) for input_vector in training_data)
+    evaluate = Tree(expression).evaluate
+    calculated_results = (evaluate(input_vector) for input_vector in training_data)
     target_results = training_data.values()
     return mean_square_error(calculated_results, target_results)
 
 
 def load_training_data(filename):
     training_data = OrderedDict()
-
     with open(filename) as f:
         for line in csv.reader(f, delimiter='\t'):
             *input_vector, output = line

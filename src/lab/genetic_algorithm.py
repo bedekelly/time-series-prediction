@@ -5,15 +5,7 @@ from lab.generation import generate_random_solutions
 from lab.sorting import stochastic_sort
 
 
-def mutate(child):
-    return child
-
-
-def crossover(parent1, parent2):
-    return parent1, parent2
-
-
-def breed(parents, mutation_crossover_ratio=0.3):
+def breed(parents, mutation_crossover_ratio=1):
     """
     Apply variation operators to all parents and generate the same
     number of children.
@@ -30,12 +22,12 @@ def breed(parents, mutation_crossover_ratio=0.3):
         if num_children == 1 or random.random() < mutation_crossover_ratio:
             print(num_children, parents)
             parent = parents[num_children]
-            child = mutate(parent)
+            child = parent.mutate()
             children.append(child)
             num_children -= 1
         else:
             parent1, parent2 = parents[num_children], parents[num_children-1]
-            new_children = crossover(parent1, parent2)
+            new_children = parent1.crossover(parent2)
             children.extend(new_children)
             num_children -= 2
 
@@ -78,8 +70,7 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_p
 
 def test_genetic_algorithm():
     training_data = load_training_data("src/lab/data1.dat")
-    solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=100, training=training_data)
-
+    solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=1, training=training_data)
     for solution in solutions:
         print(solution)
 

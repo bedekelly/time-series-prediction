@@ -1,4 +1,4 @@
-from lab.main import evaluate_expression
+from lab.tree import Tree
 
 test_cases = {
     ("(add 1 2)", ""): 3,
@@ -43,15 +43,16 @@ test_cases = {
      "sqrt 1)) (diff 8 (exp 3))) (add (avg 2 (data 6)) (avg (pow (mul (ifleq 5 2 (data 8) 3) (ifleq 2 3 5 7)) (log "
      "0)) (div (data (log 7)) (pow 3 6)))))))", "0 1 2 3 4 5 6 7 8 9"): 7,
 
-    # # Check this actually completes.
-    # ("(add (ifleq (add 8 32) (ifleq 82 (pow (data (exp (div 73 56))) (max (ifleq 13 12 12 (add 32 12)) 97)) (sqrt ("
-    #  "log 82)) 91) (max 51 (diff (ifleq 64 (mul 36 20) (pow (ifleq 78 7 (add (data (data 95)) 29) 95) (sqrt (data "
-    #  "2))) (data 50)) (diff (div 98 (sub 57 15)) (pow (exp 92) 21)))) (diff (div (div 42 (max (sqrt 17) (diff 79 "
-    #  "32))) (pow (max 74 86) (ifleq 75 65 (max 42 (diff 25 4)) 77))) (exp (sqrt 89)))) (sqrt (sub (max (pow 7 (sub ("
-    #  "pow 63 46) 71)) 27) (exp 98))))", ' '.join(map(str, range(100)))): 0
+    # Check this actually completes.
+    ("(add (ifleq (add 8 32) (ifleq 82 (pow (data (exp (div 73 56))) (max (ifleq 13 12 12 (add 32 12)) 97)) (sqrt ("
+     "log 82)) 91) (max 51 (diff (ifleq 64 (mul 36 20) (pow (ifleq 78 7 (add (data (data 95)) 29) 95) (sqrt (data "
+     "2))) (data 50)) (diff (div 98 (sub 57 15)) (pow (exp 92) 21)))) (diff (div (div 42 (max (sqrt 17) (diff 79 "
+     "32))) (pow (max 74 86) (ifleq 75 65 (max 42 (diff 25 4)) 77))) (exp (sqrt 89)))) (sqrt (sub (max (pow 7 (sub ("
+     "pow 63 46) 71)) 27) (exp 98))))", ' '.join(map(str, range(100)))): 0
 }
 
 
 def test_all_functions():
     for (expression, input_vector), result in test_cases.items():
-        assert evaluate_expression(expression, input_vector) == result
+        result = Tree(expression).evaluate(input_vector)
+        assert Tree(expression).evaluate(input_vector) == result

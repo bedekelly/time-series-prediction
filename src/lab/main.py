@@ -1,5 +1,5 @@
 import click
-from lab.evaluate_expression import evaluate_expression
+from lab.parsing import evaluate_expression
 
 
 @click.command()

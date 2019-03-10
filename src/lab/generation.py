@@ -3,6 +3,7 @@ import random
 from lab.solution import Solution
 from lab.math_functions import MATH_FUNCTIONS
 from lab.data_functions import DATA_FUNCTIONS
+from lab.tree import Tree
 
 
 def generate_random_solutions(n, input_size, max_depth=10):
@@ -22,9 +23,9 @@ def generate_random_solutions(n, input_size, max_depth=10):
 
     def create_random_node(depth):
         if random.random() < depth / max_depth:
-            return random_number()
+            return Tree(random_number())
         name, (_, arity) = random_function()
-        return [name, *create_random_nodes(arity, depth + 1)]
+        return Tree([name, *create_random_nodes(arity, depth + 1)])
 
     def create_random_nodes(num_nodes, depth=0):
         return [create_random_node(depth) for i in range(num_nodes)]
