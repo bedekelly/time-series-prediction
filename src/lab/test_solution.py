@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from src.solution import Solution
+from lab.solution import Solution
 
 
 def test_solution():

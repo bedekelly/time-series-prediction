@@ -1,6 +1,6 @@
 import sexpdata
 
-from src.evaluate_tree import evaluate_tree
+from lab.evaluate_tree import evaluate_tree
 
 
 def normalise_tree(tree):

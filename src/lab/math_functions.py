@@ -1,8 +1,8 @@
 import operator
 import math
 
-from src.safety_harness import safety_harness
-from src.function import Function
+from lab.safety_harness import safety_harness
+from lab.function import Function
 
 
 def ifleq(a, b, c, d):

@@ -1,7 +1,7 @@
-from src.evaluate_tree import evaluate_tree
-from src.evaluate_fitness import evaluate_fitness_against_data
+from lab.evaluate_tree import evaluate_tree
+from lab.evaluate_fitness import evaluate_fitness_against_data
 
-from src.evaluate_expression import parse
+from lab.evaluate_expression import parse
 
 
 class Solution:

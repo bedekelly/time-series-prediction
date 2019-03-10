@@ -1,5 +1,5 @@
-from src.math_functions import MATH_FUNCTIONS
-from src.data_functions import DATA_FUNCTIONS
+from lab.math_functions import MATH_FUNCTIONS
+from lab.data_functions import DATA_FUNCTIONS
 
 
 def evaluate_tree(syntax_tree, input_vector=None):

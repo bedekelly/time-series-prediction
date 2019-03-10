@@ -1,6 +1,6 @@
 import math
 
-from src.function import Function
+from lab.function import Function
 
 
 def _safety_harness(function):

@@ -1,4 +1,4 @@
-from src.main import evaluate_expression
+from lab.main import evaluate_expression
 
 test_cases = {
     ("(add 1 2)", ""): 3,

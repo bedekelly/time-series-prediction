@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from src.evaluate_fitness import evaluate_fitness_against_data
+from lab.evaluate_fitness import evaluate_fitness_against_data
 
 
 def test_simple_fitness_evaluation():
