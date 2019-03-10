@@ -51,7 +51,12 @@ def test_replace_subtree_at():
     assert len(new_tree) == 9
 
 
+def test_tree_height():
+    assert Tree("(mul (add 1 2) (sub (div 8 2) 4))").height == 3
+    assert Tree(1).height == 0
+
 if __name__ == "__main__":
     test_expression_length()
     test_subtree_at()
     test_replace_subtree_at()
+    test_tree_height()

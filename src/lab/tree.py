@@ -19,6 +19,7 @@ class Tree:
         self._string = None
         self._length = self._calculate_length()
         self._string = self._calculate_string()
+        self.height = self._calculate_height()
 
     def evaluate(self, input_vector=None):
         """
@@ -29,9 +30,6 @@ class Tree:
         # If we're just an int wrapper, return the int.
         if type(self._expression) is int:
             return self._expression
-
-        if type(self._expression) is type(self):
-            return self._expression.evaluate(input_vector)
 
         if type(input_vector) is str:
             input_vector = tuple(float(x) for x in input_vector.strip().split())
@@ -60,12 +58,21 @@ class Tree:
 
     def _calculate_string(self):
         """
-        Display an expression like ["mul", 2, 3] as (mul 2 3).
+        Display a tree like ["mul", 2, 3] as (mul 2 3).
         :return: A formatted string representation of this tree.
         """
         if type(self._expression) == int:
             return str(self._expression)
         return f"({self._expression[0]} {' '.join(map(str, self._expression[1:]))})"
+
+    def _calculate_height(self):
+        """
+        Calculate the maximum height of a tree.
+        :return: The length of the longest path from root to leaf.
+        """
+        if type(self._expression) == int:
+            return 0
+        return 1 + max(x.height for x in self._expression[1:])
 
     def __len__(self):
         return self._length

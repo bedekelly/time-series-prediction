@@ -8,7 +8,7 @@ from lab.tree import Tree
 MAX_DEPTH = 10
 
 
-def random_number(lo=0, hi=0):
+def random_number(hi=0, lo=0):
     return random.randrange(lo, hi)
 
 
@@ -18,7 +18,7 @@ def random_function():
 
 def create_random_node(depth=0, max_depth=MAX_DEPTH):
     if random.random() < depth / max_depth:
-        return Tree(random_number())
+        return Tree(random_number(max_depth))
     name, (_, arity) = random_function()
     return Tree([name, *create_random_nodes(arity, depth + 1)])
 

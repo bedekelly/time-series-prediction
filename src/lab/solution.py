@@ -33,16 +33,18 @@ class Solution:
 
         # Pick a random node and get its depth.
         random_index = randrange(len(self.expression_tree))
-        _, node_depth = self.expression_tree.subtree_at(random_index)
+        node_depth, subtree = self.expression_tree.subtree_at(random_index)
 
         # Create a random node with an appropriate max-depth.
-        max_depth = MAX_DEPTH - node_depth
-        create_random_node(max_depth=max_depth)
+        max_possible_depth = MAX_DEPTH - node_depth
+        max_depth = max(subtree.height * 2, MAX_DEPTH - node_depth)
+        random_tree = create_random_node(max_depth=max_depth)
 
         # Replace initial node with the one we've created in a new tree
+        new_tree = self.expression_tree.replace_subtree_at(random_index, random_tree)
 
         # Create & return a Solution with that tree
-        pass
+        return Solution(new_tree)
 
     def crossover(self, other):
         raise NotImplemented("Crossover doesn't work yet!")
