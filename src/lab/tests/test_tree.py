@@ -36,15 +36,19 @@ def test_replace_subtree_at():
     t = Tree("(mul (add 1 2) (sub (div 8 2) 4))")
     new_tree = t.replace_subtree_at(0, Tree(1))
     assert str(new_tree) == "1"
+    assert len(new_tree) == 1
 
     new_tree = t.replace_subtree_at(4, Tree("(add 3 4)"))
     assert str(new_tree) == "(mul (add 1 2) (add 3 4))"
+    assert len(new_tree) == 7
 
     new_tree = t.replace_subtree_at(7, Tree("(add 1 2)"))
     assert str(new_tree) == "(mul (add 1 2) (sub (div 8 (add 1 2)) 4))"
+    assert len(new_tree) == 11
 
     new_tree = t.replace_subtree_at(3, Tree(5))
     assert str(new_tree) == "(mul (add 1 5) (sub (div 8 2) 4))"
+    assert len(new_tree) == 9
 
 
 if __name__ == "__main__":

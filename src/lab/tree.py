@@ -6,14 +6,17 @@ from lab.data_functions import DATA_FUNCTIONS
 class Tree:
 
     def __init__(self, expression):
+        # Parse any raw string expressions.
         if type(expression) is str:
             expression = parse(expression)
+
+        # Use immutable data structures for speed & safety.
+        if type(expression) is list:
+            expression = tuple(expression)
+
         self._expression = expression
         self._length = None
         self._string = None
-        self.update_info()
-
-    def update_info(self):
         self._length = self._calculate_length()
         self._string = self._calculate_string()
 
