@@ -1,7 +1,5 @@
-import random
-
-from evaluate_fitness import load_training_data
-from generation import generate_random_solutions
+from src.evaluate_fitness import load_training_data
+from src.generation import generate_random_solutions
 
 
 def genetic_algorithm(pop_size=100, input_size=100, training=None):

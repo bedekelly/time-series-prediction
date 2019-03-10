@@ -1,9 +1,13 @@
-from evaluate_tree import evaluate_tree
-from evaluate_fitness import evaluate_fitness_against_data
+from src.evaluate_tree import evaluate_tree
+from src.evaluate_fitness import evaluate_fitness_against_data
+
+from src.evaluate_expression import parse
 
 
 class Solution:
     def __init__(self, expression_tree):
+        if type(expression_tree) is str:
+            expression_tree = parse(expression_tree)
         self.expression_tree = expression_tree
         self.fitness = None
 
@@ -22,3 +26,4 @@ class Solution:
 
     def evaluate_fitness_against(self, training_data):
         self.fitness = evaluate_fitness_against_data(self.expression_tree, training_data)
+        return self.fitness

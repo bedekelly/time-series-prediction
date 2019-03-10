@@ -1,8 +1,8 @@
 import random
 
-from solution import Solution
-from math_functions import MATH_FUNCTIONS
-from data_functions import DATA_FUNCTIONS
+from src.solution import Solution
+from src.math_functions import MATH_FUNCTIONS
+from src.data_functions import DATA_FUNCTIONS
 
 
 def generate_random_solutions(n, input_size, max_depth=10):

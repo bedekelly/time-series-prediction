@@ -1,7 +1,7 @@
 from math import floor
 from statistics import mean
-from safety_harness import safety_harness
-from function import Function
+from src.safety_harness import safety_harness
+from src.function import Function
 
 
 def index(param, input_vector):

@@ -2,8 +2,8 @@ import csv
 from statistics import mean
 from collections import OrderedDict
 
-from evaluate_expression import evaluate_expression
-from evaluate_tree import evaluate_tree
+from src.evaluate_expression import evaluate_expression
+from src.evaluate_tree import evaluate_tree
 
 
 def mean_square_error(seq1, seq2):
@@ -11,6 +11,7 @@ def mean_square_error(seq1, seq2):
 
 
 def evaluate_fitness_against_data(expression, training_data):
+    print(training_data)
     eval_function = evaluate_expression if type(expression) == str else evaluate_tree
     calculated_results = (eval_function(expression, input_vector) for input_vector in training_data)
     target_results = training_data.values()
