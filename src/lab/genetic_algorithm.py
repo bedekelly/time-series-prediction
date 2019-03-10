@@ -16,21 +16,21 @@ def breed(parents, mutation_crossover_ratio=1):
     """
     children = []
     random.shuffle(parents)
-    num_children = len(parents) - 1
+    num_children = len(parents)
 
     while num_children:
         if num_children == 1 or random.random() < mutation_crossover_ratio:
-            parent = parents[num_children]
+            parent = parents[num_children-1]
             child = parent.mutate()
             children.append(child)
             num_children -= 1
         else:
-            parent1, parent2 = parents[num_children], parents[num_children - 1]
+            parent1, parent2 = parents[num_children-1], parents[num_children-2]
             new_children = parent1.crossover(parent2)
             children.extend(new_children)
             num_children -= 2
 
-    return [p for p in parents]
+    return children
 
 
 def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_parents=0.3, training=None):
@@ -52,10 +52,15 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_p
 
     for i in range(number_iterations):
         # - Check termination condition
+        assert len(population) == pop_size
         population = stochastic_sort(population)
+        assert len(population) == pop_size
 
         parents = population[:num_parents]
+        assert parents
+
         children = breed(parents)
+        assert len(children) == len(parents)
 
         for c in children:
             c.evaluate_fitness_against(training)
@@ -68,13 +73,18 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_p
 
 
 def test_genetic_algorithm(tests=1):
-    training_data = load_training_data("src/lab/data1.dat")
+    training_data = load_training_data("src/lab/average.dat")
+
+    solutions = []
 
     print("[", end='')
     for _ in range(tests):
-        solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=1, training=training_data)
+        solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=1000, training=training_data)
         print(".", end='')
-    print("]", end='')
+    print("]")
+
+    for s in solutions:
+        print(s)
 
 
 if __name__ == "__main__":
