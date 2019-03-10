@@ -43,6 +43,16 @@ def breed(parents, mutation_crossover_ratio=0.3):
 
 
 def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_parents=0.3, training=None):
+    """
+    Run an independent instance of the genetic algorithm.
+    :param pop_size: The size of the population to evolve.
+    :param input_size: The size of the input vectors in the training data.
+    :param number_iterations: The number of generations of evolution.
+    :param num_parents: Number of parents chosen from the population each generation,
+        as a fraction of the population size.
+    :param training: The training data.
+    :return: The population of the final generation.
+    """
     population = generate_random_solutions(pop_size, input_size)
     num_children = num_parents = int(input_size * num_parents)
 
