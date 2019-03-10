@@ -5,8 +5,40 @@ from lab.generation import generate_random_solutions
 from lab.sorting import stochastic_sort
 
 
-def breed(parents, num_children):
-    # Apply variation operators to parents to get children.
+def mutate(child):
+    return child
+
+
+def crossover(parent1, parent2):
+    return parent1, parent2
+
+
+def breed(parents, mutation_crossover_ratio=0.3):
+    """
+    Apply variation operators to all parents and generate the same
+    number of children.
+    :param parents: The parents to be bred.
+    :param mutation_crossover_ratio: The probability that we'll mutate
+        the next parent instead of using crossover.
+    :return: The children we've gained as a result of breeding.
+    """
+    children = []
+    random.shuffle(parents)
+    num_children = len(parents)-1
+
+    while num_children:
+        if num_children == 1 or random.random() < mutation_crossover_ratio:
+            print(num_children, parents)
+            parent = parents[num_children]
+            child = mutate(parent)
+            children.append(child)
+            num_children -= 1
+        else:
+            parent1, parent2 = parents[num_children], parents[num_children-1]
+            new_children = crossover(parent1, parent2)
+            children.extend(new_children)
+            num_children -= 2
+
     return [p for p in parents]
 
 
@@ -22,19 +54,21 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_p
         population = stochastic_sort(population)
 
         parents = population[:num_parents]
-        children = breed(parents, num_children)
+        children = breed(parents)
 
         for c in children:
             c.evaluate_fitness_against(training)
 
         # - use crowding to replace similar individuals
+        # (for now, replace lowest ranked individuals)
+        population = population[:-num_children] + children
 
     return population
 
 
 def test_genetic_algorithm():
     training_data = load_training_data("src/lab/data1.dat")
-    solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=1, training=training_data)
+    solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=100, training=training_data)
 
     for solution in solutions:
         print(solution)
