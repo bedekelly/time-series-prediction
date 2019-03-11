@@ -57,9 +57,38 @@ def test_tree_height():
 
 
 def test_tree_equality():
+    assert Tree(0.0) == 0
+    assert Tree(10) == 10
     assert Tree(1) == Tree(1)
     assert Tree("(mul 1 2)") == Tree("(mul 1 2)")
     assert Tree("(mul 1 2)") != Tree ("(mul (add 1 2) 2)")
+
+
+def test_tree_simplify():
+    assert Tree(1).simplify() == Tree(1)
+    assert Tree("(mul 1 2)").simplify() == Tree(2)
+    assert Tree("(mul 5 (add 2 3))").simplify() == Tree(25)
+    assert Tree("(data 0)").simplify() == Tree("(data 0)")
+    assert Tree("(add (data 0) 2)").simplify() == Tree("(add (data 0) 2)")
+    assert Tree("(data (add 1 2))").simplify() == Tree("(data 3)")
+    assert Tree("(pow 0 2)").simplify() == Tree(0)
+
+
+def test_tree_lazy_simplify():
+    assert Tree("(ifleq 1 2 (data 0) (data 1))").simplify() == Tree("(data 0)")
+    assert Tree(
+        "(add (sqrt 0) (mul (add (ifleq 2 (diff 4 0) (diff 0 2) (pow 4 0)) 4) (data (div 3 0))))"
+    ).simplify() == Tree("(mul (add (ifleq 2 (diff 4 0) (diff 0 2) 1) 4) (data 0))")
+    assert Tree(
+        "(sub (mul (add (mul (sqrt 1) 2) 3) (avg (add 2 3) (data (max 3 2)))) (div (data (max 2 (avg 3 3))) (diff 2 ("
+        "avg 0 (add 4 3))))) "
+    ).simplify() == Tree("(sub (mul 5.0 (avg 5 (data 3))) (div (data (max 2 (avg 3 3))) (diff 2 (avg 0 7))))")
+    assert Tree(
+        "(sub (data 3) (ifleq (data (mul 0 1)) (log (data 3)) (add -8 (diff 1.0 3)) 1))"
+    ).simplify() == Tree("(sub (data 3) (ifleq (data 0) (log (data 3)) (add -8 (diff 1.0 3)) 1))")
+    assert Tree(
+        "(add (sub 8 (diff (pow 1 (avg 4 3)) 403.4287934927351)) (data (sqrt (data 3))))"
+    ).simplify() == Tree("(add (sub 8 (diff 1 403.4287934927351)) (data (sqrt (data 3))))")
 
 
 if __name__ == "__main__":
@@ -67,3 +96,5 @@ if __name__ == "__main__":
     test_subtree_at()
     test_replace_subtree_at()
     test_tree_height()
+    test_tree_simplify()
+    test_tree_lazy_simplify()

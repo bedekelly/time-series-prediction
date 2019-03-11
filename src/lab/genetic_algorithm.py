@@ -1,4 +1,6 @@
 import random
+import sys
+from math import floor
 
 from lab.evaluate_fitness import load_training_data
 from lab.generation import generate_random_solutions
@@ -33,35 +35,42 @@ def breed(parents, mutation_crossover_ratio=1):
     return children
 
 
-def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_parents=0.3, training=None):
+def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fraction_parents=0.1, p_simplify=0.01, training=None):
     """
     Run an independent instance of the genetic algorithm.
     :param pop_size: The size of the population to evolve.
     :param input_size: The size of the input vectors in the training data.
     :param number_iterations: The number of generations of evolution.
-    :param num_parents: Number of parents chosen from the population each generation,
-        as a fraction of the population size.
+    :param fraction_parents: Fraction of parents chosen from the population each generation
     :param training: The training data.
+    :param p_simplify: The likelihood of simplifying a solution each generation.
     :return: The population of the final generation.
     """
+
     population = generate_random_solutions(pop_size, input_size)
-    num_children = num_parents = int(pop_size * num_parents)
+    num_children = num_parents = floor(pop_size * fraction_parents)
 
     for solution in population:
         solution.evaluate_fitness_against(training)
+    best_so_far = population[0].simplify()
 
+    print('[', end='')
     for i in range(number_iterations):
-        # - Check termination condition
-        assert len(population) == pop_size
         population = stochastic_sort(population)
-        assert len(population) == pop_size
 
+        # Simplify each expression with some probability each generation.
+        population = [p.simplify() if random.random() < p_simplify else p for p in population]
+
+        # Check for a new best-ever solution.
+        for solution in population:
+            better_fitness = solution.fitness < best_so_far.fitness
+            same_fitness_simpler = solution.fitness == best_so_far.fitness and solution.length < best_so_far.length
+            if better_fitness or same_fitness_simpler:
+                best_so_far = solution
+
+        # Pick parents and breed to get children.
         parents = population[:num_parents]
-        assert parents
-
         children = breed(parents)
-        assert len(children) == len(parents)
-
         for c in children:
             c.evaluate_fitness_against(training)
 
@@ -69,23 +78,9 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, num_p
         # (for now, replace lowest ranked individuals)
         population = population[:-num_children] + children
 
-    return population
+        if i % 100 == 0:
+            print('.', end='')
+            sys.stdout.flush()
 
-
-def test_genetic_algorithm(tests=1):
-    training_data = load_training_data("src/lab/average.dat")
-
-    solutions = []
-
-    print("[", end='')
-    for _ in range(tests):
-        solutions = genetic_algorithm(pop_size=100, input_size=5, number_iterations=1000, training=training_data)
-        print(".", end='')
-    print("]")
-
-    for s in solutions:
-        print(s)
-
-
-if __name__ == "__main__":
-    test_genetic_algorithm(1)
+    print(']')
+    return best_so_far

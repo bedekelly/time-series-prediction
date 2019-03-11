@@ -15,7 +15,11 @@ def limited_pow(a, b):
     than 1024. This seems small, but note that 2 ** (2 ** 10) is a number
     309 digits long.
     """
-    if a > 2 ** 10 or b > 2 ** 10:
+    if a == 0:
+        return 0
+    if a == 1 or b == 0:
+        return 1
+    if a > 2 ** 20 and b > 2 ** 10:
         return 0
     return pow(a, b)
 
@@ -46,3 +50,51 @@ MATH_FUNCTIONS = {
 
 for key, function in MATH_FUNCTIONS.items():
     MATH_FUNCTIONS[key] = safety_harness(function)
+
+
+def lazy_evaluate(fn, params):
+    """
+    Check a lot of special-cases which allow us to cut a parameter
+    list down in size without evaluating the parameters.
+    """
+
+    if fn == "add":
+        if params[0] == 0:
+            return params[1]
+        if params[1] == 0:
+            return params[0]
+    elif fn == "sub":
+        if params[1] == 0:
+            return params[0]
+    elif fn == "mul":
+        if params[0] == 0:
+            return 0
+        elif params[1] == 0:
+            return 0
+        elif params[0] == 1:
+            return params[1]
+        elif params[1] == 1:
+            return params[0]
+    elif fn == "div":
+        if params[0] == 0:
+            return params[0]
+        elif params[1] == 0:
+            return 0
+        elif params[1] == 1:
+            return params[0]
+    elif fn == "pow":
+        if params[0] == 0:
+            return 0
+        if params[0] in (0, 1):
+            return params[0]
+    elif fn == "ifleq":
+        try:
+            if params[0] <= params[1]:
+                return params[2]
+            else:
+                return params[3]
+        except TypeError:
+            pass
+
+    # If none of these apply, return the original parameter list.
+    return [fn, *params]

@@ -15,16 +15,16 @@ class Solution:
         self.expression_tree = expression_tree
         self.fitness = None
         self.length = len(self.expression_tree)
-        self.penalty = self.length * LENGTH_PENALTY
 
     def __str__(self):
-        return f"Solution(fitness={self.fitness-self.penalty}, penalty={self.penalty}, tree={self.expression_tree})"
+        return f"Solution(fitness={self.fitness}, tree={self.expression_tree})"
 
     def evaluate(self, input_vector):
         return self.expression_tree.evaluate(input_vector)
 
     def evaluate_fitness_against(self, training_data):
-        self.fitness = evaluate_fitness_against_data(self.expression_tree, training_data) + self.penalty
+        self._training_data = training_data
+        self.fitness = evaluate_fitness_against_data(self.expression_tree, training_data)
         return self.fitness
 
     def mutate(self):
@@ -57,3 +57,13 @@ class Solution:
 
     def crossover(self, other):
         raise NotImplemented("Crossover doesn't work yet!")
+
+    def simplify(self):
+        new_solution = Solution(self.expression_tree.simplify())
+        if self.fitness != 0:
+            new_solution.evaluate_fitness_against(self._training_data)
+            if new_solution.fitness == 0:
+                import pdb; pdb.set_trace()
+        else:
+            new_solution.fitness = self.fitness
+        return new_solution

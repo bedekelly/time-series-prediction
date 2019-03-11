@@ -22,11 +22,11 @@ def stochastic_sort(population, number_sweeps=1, wrong_choice=0.4):
 
     def fitness(i):
         # Here, we're trying to *minimise* cost.
-        return -population[i].fitness
+        return population[i].fitness
 
     for _ in range(number_sweeps):
         for i in range(len(population) - 1):
-            should_swap = fitness(i) < fitness(i + 1)
+            should_swap = fitness(i) > fitness(i + 1)
             wrong_way = random.random() < wrong_choice
             if should_swap ^ wrong_way:
                 swap(i, i+1)

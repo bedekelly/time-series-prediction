@@ -1,5 +1,5 @@
 from lab.parsing import parse
-from lab.math_functions import MATH_FUNCTIONS
+from lab.math_functions import MATH_FUNCTIONS, lazy_evaluate
 from lab.data_functions import DATA_FUNCTIONS
 
 
@@ -7,6 +7,9 @@ class Tree:
 
     def __init__(self, expression):
         # Parse any raw string expressions.
+
+        assert type(expression) is not type(self)
+
         if type(expression) is str:
             expression = parse(expression)
 
@@ -28,7 +31,7 @@ class Tree:
         :return: The tree's final evaluated value.
         """
         # If we're just an int wrapper, return the int.
-        if type(self._expression) is int:
+        if type(self._expression) is not tuple:
             return self._expression
 
         if type(input_vector) is str:
@@ -47,32 +50,69 @@ class Tree:
 
         raise ValueError("Invalid function: ", fun_key)
 
+    def simplify(self):
+
+        new_expression = None
+
+        # If we're just an int wrapper, we're as simple as can be!
+        if type(self._expression) is not tuple:
+            new_expression = self._expression
+
+        # If we're wrapping an expression, evaluate as much as possible.
+        else:
+            fun_key, *params = self._expression
+            simplified_params = [param.simplify() for param in params]
+            param_expressions = [p._expression for p in simplified_params]
+
+            # If all our parameters are numbers, we can do maths!
+            if fun_key in MATH_FUNCTIONS and all(type(exp) is not tuple for exp in param_expressions):
+                fun = MATH_FUNCTIONS[fun_key].fun
+                new_expression = fun(*param_expressions)
+
+            # If only some of our parameters are numbers, we can still do maths!
+            else:
+                new_expression = lazy_evaluate(fun_key, simplified_params)
+
+        if type(new_expression) is Tree:
+            return new_expression
+        return Tree(new_expression)
+
+    def __le__(self, other):
+        if type(self._expression) is tuple:
+            raise TypeError("Cannot compare unevaluated expressions")
+        return self._expression <= other
+
+    def __ge__(self, other):
+        if type(self._expression) is tuple:
+            raise TypeError("Cannot compare unevaluated expressions")
+        return self._expression >= other
+
     def _calculate_length(self):
         """
         Calculate the number of nodes in this tree.
         :return: The number of nodes in the tree.
         """
-        if type(self._expression) is int:
-            return 1
-        return 1 + sum(len(param) for param in self._expression[1:])
+        if type(self._expression) is tuple:
+            return 1 + sum(len(param) for param in self._expression[1:])
+        return 1
 
     def _calculate_string(self):
         """
         Display a tree like ["mul", 2, 3] as (mul 2 3).
         :return: A formatted string representation of this tree.
         """
-        if type(self._expression) == int:
-            return str(self._expression)
-        return f"({self._expression[0]} {' '.join(map(str, self._expression[1:]))})"
+        if type(self._expression) is tuple:
+            return f"({self._expression[0]} {' '.join(map(str, self._expression[1:]))})"
+        return str(self._expression)
 
     def _calculate_height(self):
         """
         Calculate the maximum height of a tree.
         :return: The length of the longest path from root to leaf.
         """
-        if type(self._expression) == int:
-            return 0
-        return 1 + max(x.height for x in self._expression[1:])
+        if type(self._expression) == tuple:
+            return 1 + max(x.height for x in self._expression[1:])
+        return 0
 
     def __len__(self):
         return self._length
@@ -80,8 +120,12 @@ class Tree:
     def __str__(self):
         return self._string
 
+    __repr__ = __str__
+
     def __eq__(self, other):
-        return str(self) == str(other)
+        if type(self._expression) is tuple:
+            return str(self) == str(other)
+        return self._expression == other
 
     def replace_subtree_at(self, index, new_subtree):
         """
