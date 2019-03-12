@@ -7,7 +7,7 @@ from lab.generation import generate_random_solutions
 from lab.sorting import stochastic_sort
 
 
-def breed(parents, mutation_crossover_ratio=1):
+def breed(parents, mutation_crossover_ratio=0.5):
     """
     Apply variation operators to all parents and generate the same
     number of children.
@@ -28,8 +28,8 @@ def breed(parents, mutation_crossover_ratio=1):
             num_children -= 1
         else:
             parent1, parent2 = parents[num_children-1], parents[num_children-2]
-            new_children = parent1.crossover(parent2)
-            children.extend(new_children)
+            child1, child2 = parent1.crossover(parent2)
+            children.extend([child1, child2])
             num_children -= 2
 
     return children

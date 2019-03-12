@@ -1,3 +1,4 @@
+import random
 from random import randrange
 
 from lab.evaluate_fitness import evaluate_fitness_against_data
@@ -27,7 +28,7 @@ class Solution:
         self.fitness = evaluate_fitness_against_data(self.expression_tree, training_data)
         return self.fitness
 
-    def mutate(self):
+    def mutate(self, p_select_subtree=0.5):
         """
         Return a mutated version of this solution.
         :return: A mutated solution.
@@ -40,7 +41,11 @@ class Solution:
         random_index = randrange(len(self.expression_tree))
         node_depth, subtree = self.expression_tree.subtree_at(random_index)
 
-        # Create a random node with an appropriate max-depth.
+        # With some probability, just return that random node.
+        if random.random() < p_select_subtree:
+            return Solution(subtree)
+
+        # Otherwise, create a random node with an appropriate max-depth.
         max_possible_depth = MAX_DEPTH - node_depth
 
         # Mutate until the node has actually changed. (Randomness sometimes repeats!)
@@ -56,14 +61,14 @@ class Solution:
         return Solution(new_tree)
 
     def crossover(self, other):
-        raise NotImplemented("Crossover doesn't work yet!")
+        random_index = randrange(min(len(self.expression_tree), len(other.expression_tree)))
+        _, subtree_one = self.expression_tree.subtree_at(random_index)
+        _, subtree_two = other.expression_tree.subtree_at(random_index)
+        tree_one = self.expression_tree.replace_subtree_at(random_index, subtree_two)
+        tree_two = other.expression_tree.replace_subtree_at(random_index, subtree_one)
+        return Solution(tree_one), Solution(tree_two)
 
     def simplify(self):
         new_solution = Solution(self.expression_tree.simplify())
-        if self.fitness != 0:
-            new_solution.evaluate_fitness_against(self._training_data)
-            if new_solution.fitness == 0:
-                import pdb; pdb.set_trace()
-        else:
-            new_solution.fitness = self.fitness
+        new_solution.fitness = self.fitness
         return new_solution
