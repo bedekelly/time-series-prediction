@@ -39,10 +39,9 @@ def q2(expr, _, _, data):
 @click.option('-m', help="Size of the training data")
 @click.option('-data', help="Filename of the training data")
 @click.option('-time_budget', help="Time budget for the algorithm")
-def q3(n, m, data, time_budget, **kwargs):
+def q3(_, m, data, time_budget, **kwargs):
 
     # Normalise our cli-arguments.
-    n = int(n)
     m = int(m)
     lambda_ = int(kwargs["lambda"])
 
