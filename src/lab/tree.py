@@ -52,8 +52,6 @@ class Tree:
 
     def simplify(self):
 
-        new_expression = None
-
         # If we're just an int wrapper, we're as simple as can be!
         if type(self._expression) is not tuple:
             new_expression = self._expression
@@ -75,6 +73,7 @@ class Tree:
 
         if type(new_expression) is Tree:
             return new_expression
+
         return Tree(new_expression)
 
     def __le__(self, other):

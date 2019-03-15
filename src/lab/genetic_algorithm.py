@@ -1,8 +1,6 @@
 import random
-import sys
 from math import floor
 
-from lab.evaluate_fitness import load_training_data
 from lab.generation import generate_random_solutions
 from lab.sorting import stochastic_sort
 
@@ -35,7 +33,8 @@ def breed(parents, mutation_crossover_ratio=0.5):
     return children
 
 
-def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fraction_parents=0.1, p_simplify=0.01, training=None):
+def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fraction_parents=0.1, p_simplify=0.01,
+                      training=None, results_queue=None):
     """
     Run an independent instance of the genetic algorithm.
     :param pop_size: The size of the population to evolve.
@@ -44,6 +43,7 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fract
     :param fraction_parents: Fraction of parents chosen from the population each generation
     :param training: The training data.
     :param p_simplify: The likelihood of simplifying a solution each generation.
+    :param results_queue: A results queue to populate with the current best solution.
     :return: The population of the final generation.
     """
 
@@ -54,7 +54,6 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fract
         solution.evaluate_fitness_against(training)
     best_so_far = population[0].simplify()
 
-    print('[', end='')
     for i in range(number_iterations):
         population = stochastic_sort(population)
 
@@ -68,6 +67,9 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fract
             if better_fitness or same_fitness_simpler:
                 best_so_far = solution
 
+        if results_queue is not None:
+            results_queue.put(best_so_far)
+
         # Pick parents and breed to get children.
         parents = population[:num_parents]
         children = breed(parents)
@@ -78,9 +80,4 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fract
         # (for now, replace lowest ranked individuals)
         population = population[:-num_children] + children
 
-        if i % 100 == 0:
-            print('.', end='')
-            sys.stdout.flush()
-
-    print(']')
     return best_so_far

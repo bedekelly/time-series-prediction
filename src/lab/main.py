@@ -1,3 +1,7 @@
+import queue
+import time
+from threading import Thread
+
 import click
 
 from lab.evaluate_fitness import load_training_data
@@ -24,7 +28,7 @@ def q1(expr, _, x):
 @click.option('-n', help='Dimension of the input vector')
 @click.option('-m', help="Size of the training data")
 @click.option('-data', help="Filename of the training data")
-def q2(expr, n, m, data):
+def q2(expr, _, _, data):
     training_data = load_training_data(data)
     print(Solution(expr).evaluate_fitness_against(training_data))
 
@@ -37,10 +41,6 @@ def q2(expr, n, m, data):
 @click.option('-time_budget', help="Time budget for the algorithm")
 def q3(n, m, data, time_budget, **kwargs):
 
-    global best
-    global training_data
-    global fitness_separately
-
     # Normalise our cli-arguments.
     n = int(n)
     m = int(m)
@@ -50,16 +50,17 @@ def q3(n, m, data, time_budget, **kwargs):
     training_data = load_training_data(data)
 
     # Perform the genetic algorithm.
-    best = genetic_algorithm(lambda_, m, 1000, training=training_data)
-    print(best)
+    results_queue = queue.LifoQueue()
+    computation_thread = Thread(
+        target=lambda: genetic_algorithm(lambda_, m, 1000, training=training_data, results_queue=results_queue),
+        daemon=True  # Allow exiting when the timer runs out.
+    )
+    computation_thread.start()
 
-    # Check that we evaluated the fitness correctly.
-    fitness_separately = Solution(str(best.expression_tree)).evaluate_fitness_against(training_data)
-    if best.fitness != fitness_separately:
-        print("Different")
-        print(best)
-        print(fitness_separately)
-        import pdb; pdb.set_trace()
+    # Wait max. of time-budget seconds for the algorithm to finish.
+    time.sleep(int(time_budget))
+    best = results_queue.get_nowait()
+    print(best.tree)
 
 
 if __name__ == "__main__":

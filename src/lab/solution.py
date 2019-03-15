@@ -20,11 +20,14 @@ class Solution:
     def __str__(self):
         return f"Solution(fitness={self.fitness}, tree={self.expression_tree})"
 
+    @property
+    def tree(self):
+        return self.expression_tree
+
     def evaluate(self, input_vector):
         return self.expression_tree.evaluate(input_vector)
 
     def evaluate_fitness_against(self, training_data):
-        self._training_data = training_data
         self.fitness = evaluate_fitness_against_data(self.expression_tree, training_data)
         return self.fitness
 
