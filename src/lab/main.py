@@ -28,7 +28,7 @@ def q1(expr, _, x):
 @click.option('-n', help='Dimension of the input vector')
 @click.option('-m', help="Size of the training data")
 @click.option('-data', help="Filename of the training data")
-def q2(expr, _, _, data):
+def q2(expr, _, __, data):
     training_data = load_training_data(data)
     print(Solution(expr).evaluate_fitness_against(training_data))
 
