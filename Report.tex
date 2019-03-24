@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+\usepackage[ruled,vlined]{algorithm2e}
+
+\begin{document}
+
+ \title{Time Series Prediction with GP}
+ \author{Bede Kelly}
+ \maketitle
+
+The basic genetic algorithm framework used is shown in \textbf{Algorithm 1}. It's a relatively simple genetic algorithm, with the addition of a ``simplify'' step --- with some probability, mathematical expressions like ``1 + 1'' or ``sqrt(log(55))'' will be evaluated and replaced with their result. This balances against the explosion of complexity introduced with mutation.\\
+
+The algorithm for breeding children is shown in \textbf{Algorithm 2}. Essentially we iterate through the parents, and with some probability either use \textit{mutation} or \textit{crossover} to create one or two children respectively. The edge case of ``only one parent left'' is handled by using mutation irrespective of probabilities.\\
+
+Mutation, shown in \textbf{Algorithm 3}, is achieved by creating a random expression tree, and replacing a random node in the parent tree with the newly created tree. Alternatively, with some probability, we ``prune'' the parent tree by simply replacing it with one of its child nodes.\\
+
+Crossover is simpler (\textbf{Algorithm 4}), simply choosing a random index and swapping the subtrees of both parents at that index.\\
+
+Simplify is particularly implementation-specific, but the general idea may be described here. We recursively simplify all of an expression tree's parameters, then determine if they have all been fully evaluated without any reliance on external data; if so, find the suitable procedure to evaluate the root node's expression.
+
+\pagebreak
+
+ 
+\begin{algorithm}[H]
+	
+
+ \KwResult{An evolved population of fit solutions}
+
+ \Begin {
+ population $\gets$ GenerateRandomPopulation(popSize)\;\
+ 
+ \For{ individual $\in$ population }{
+   evaluateFitness(individual)\;
+ }\
+ 
+ \For{n $\in$ 0..numIterations-1}{
+  StochasticSort(population)\;\
+  
+  parents $\gets$ population.firstN(numParents)\;
+  children $\gets$ breed(parents)\;
+  
+  population $\gets$ population.firstN(size - numParents) + children\;\
+  
+  \For{individual $\in$ population}{
+    evaluateFitness(individual)\;
+    \If{fitness(individual) $>$ fitness(bestEver)}{
+      bestEver $\gets$ individual\;
+    }
+  	\If{random() $<$ $P_{simplify}$}{
+  		Simplify(individual)\;
+	}
+  }\
+ }}
+ 
+ \caption{Genetic Algorithm}
+	
+\end{algorithm}
+\pagebreak
+
+
+
+\begin{algorithm}[H]
+ \KwResult{A new sub-population of children}
+ \Begin{
+  children $\gets$ emptyList()\;
+  shuffle(parents)\;
+  numChildren $\gets$ length(parents)\;
+  
+  \While{numChildren} {
+    \eIf{numChildren $= 1$ $\vert\vert$ random() $<$ $Rate_{mutation}$}{
+      parent $\gets$ parents[numChildren-1]\;
+      child $\gets$ mutate(parent)\;
+      children += child\;
+      numChildren -= 1\;
+    }{
+	 p1 $\gets$ parents[numChildren-1]\;
+	 p2 $\gets$ parents[numChildren-2]\;
+	 child1, child2 $\gets$ crossover(p1, p2)\;
+	 children += child1\;
+	 children += child2\;
+	 numChildren -= 2\;
+    }
+  }
+  \Return children
+ 
+ }
+ \caption{Breeding}
+	
+\end{algorithm}
+\pagebreak
+
+
+\begin{algorithm}[H]
+ \KwResult{A mutation of an input expression}
+ \Begin{
+   index $\gets$ randomInteger(expressionTree.length)\;
+   depth, subtree $\gets$ subtreeAtIndex(expressionTree, index)\;\
+   
+   \If{ random() $<$ $P_{prune}$}{
+    \Return{subtree}\;
+   }\
+   
+   maxDepth $\gets$ totalMaxDepth $-$ depth\;
+   \While{randomTree $\neq$ subtree}{
+     randomTree $\gets$ createRandomTree(maxDepth)\;
+   }
+   
+   \Return replaceSubtree(expressionTree, index, randomTree)\;
+ }
+ \caption{Mutation}
+\end{algorithm}
+
+\paragraph{}\
+
+
+\begin{algorithm}[H]
+ \KwResult{A crossover between two input expressions}
+ \Begin{
+	maxIndex $\gets$ max(length(tree1), length(tree2))\;
+	index $\gets$ randomInteger(0..maxIndex-1)\;\
+	
+	sub1 $\gets$ subtreeAtIndex(tree1, index)\;
+	sub2 $\gets$ subtreeAtIndex(tree2, index)\;\
+	
+	newTree1 $\gets$ replaceSubtreeAt(tree1, index, sub2)\;
+	newTree2 $\gets$ replaceSubtreeAt(tree2, index, sub1)\;\
+	
+	\Return newTree1, newTree2
+ }
+ \caption{Crossover}
+\end{algorithm}
+
+\end{document}
+
+
+
+
