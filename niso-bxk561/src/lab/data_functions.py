@@ -10,7 +10,7 @@ def index(param, input_vector):
 
 def data(param, input_vector):
     idx = index(param, input_vector)
-    print(f"Index for {param}: {idx}")
+    # print(f"Index for {param}: {idx}")
     # print("Input vector", input_vector)
     return input_vector[idx]
 

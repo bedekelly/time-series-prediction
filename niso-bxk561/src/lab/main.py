@@ -6,6 +6,7 @@ import sys
 import time
 from threading import Thread
 from urllib.parse import quote
+from urllib.request import urlopen
 
 from evaluate_fitness import load_training_data
 from genetic_algorithm import genetic_algorithm
@@ -14,15 +15,10 @@ from tree import Tree
 
 
 def q1(expr, x):
-    import urllib.request as r
-
     result = Tree(expr).evaluate(x)
-
-    if "-test" not in sys.argv:
-        # r.urlopen("http://192.168.0.69:8000/" + quote(str(expr)) + "/" + quote(str(x)))
-        print(result)
-    else:
-        return result
+    # urlopen("http://192.168.0.69:8000/" + quote(str(expr)) + "/" + quote(str(x)))
+    print(result)
+    return result
 
 
 def q2(expr, data):
@@ -77,24 +73,19 @@ if __name__ == "__main__":
         parser.add_argument('-time_budget', type=int)
         return parser.parse_args()
 
-    if "-test" in sys.argv:
-        with open("logs.txt") as f:
-            for line in f:
-                expr = line.strip("\n")
-                inputs = next(f).strip("\n")
-                print(expr, inputs, "=", q1(expr, inputs))
-    else:
-        main(arguments())
+    # with open("logs.txt") as f:
+    #     for line in f:
+    #         expr = line.strip("\n")
+    #         inputs = next(f).strip("\n")
+    #         print(expr, " ", inputs, " =", q1(expr, inputs), sep='')
+
+    main(arguments())
 
     # Goal: fix inequality with "diff" ✓
     # Goal: fix inequality with "avg" ✓
-    # Goal: fix new inequality with "avg"
+    # Goal: fix new inequality with "avg" ✓
+    # Goal: fix weirdness with sqrt and exp
 
-
-    # (avg (log -0.298627438679) (pow (ifleq 3.70220418577 4.39778904293 3.18871562135 3.00850131927) -0.567295461733))
-    # -0.0601667594992 -2.33781066166 -1.85453916529 0.939992787715 0.352976104076 -0.329157709446 0.905607095496 -2.45394448168 0.347409046076 -0.388890343325
-    # -0.48785240875371993
-
-    # (avg 0 (pow 3.18871562135 -0.567295461733))
-
-    # should be 0 apparently?
+    # Both expressions evaluate to 1 but should eval to 0?
+    # (exp(sqrt(div 0.562190566644 -0.398498003329)))
+    # (exp(sqrt(ifleq(log - 1.20026721969)(log - 0.561497497943)(log - 1.26052564441)(log - 1.21765353218))))

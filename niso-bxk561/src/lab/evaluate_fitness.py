@@ -4,7 +4,10 @@ from collections import OrderedDict
 
 
 def mean_square_error(seq1, seq2):
-    return mean((a - b) ** 2 for a, b in zip(seq1, seq2))
+    try:
+        return mean((a - b) ** 2 for a, b in zip(seq1, seq2))
+    except OverflowError:
+        return 2 ** 100
 
 
 def evaluate_fitness_against_data(expression, training_data):

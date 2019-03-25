@@ -20,6 +20,7 @@ def limited_pow(a, b):
     if a == 1 or b == 0:
         return 1
     if a > 2 ** 20 and b > 2 ** 10:
+        # raise ValueError()
         return 0
     return pow(a, b)
 
@@ -30,6 +31,7 @@ def limited_exp(x):
     than 128. As above, this is fast.
     """
     if x > 128:
+        # raise ValueError()
         return 0
     return math.exp(x)
 
@@ -79,6 +81,7 @@ def lazy_evaluate(fn, params):
         if params[0] == 0:
             return params[0]
         elif params[1] == 0:
+            # raise ValueError
             return 0
         elif params[1] == 1:
             return params[0]
@@ -95,6 +98,7 @@ def lazy_evaluate(fn, params):
                 return params[3]
         except TypeError:
             pass
+            # raise ValueError
 
     # If none of these apply, return the original parameter list.
     return [fn, *params]

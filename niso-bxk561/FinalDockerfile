@@ -1,6 +1,6 @@
 # Do not change the following line. It specifies the base image which
 # will be downloaded when you build your image.
-FROM pypy
+FROM pklehre/niso2019-lab3
 
 # Add all the files you need for your submission into the Docker image,
 # e.g. source code , Java bytecode , etc. In this example , we assume your
@@ -18,9 +18,9 @@ ADD src /bin
 # RUN apt-get update
 # RUN apt-get -y install python-numpy
 
-# RUN apt install -y curl
-# RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y pypy3
+#RUN apt install -y curl
+RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y pypy3
 
 # The final line specifies your username and how to start your program. # Replace abc123 with your real username and python /bin/abc123.py
 # with what is required to start your program.
-CMD ["-username", "bxk561", "-submission", "python3 /bin/lab/main.py"]
+CMD ["-username", "bxk561", "-submission", "pypy3 /bin/lab/main.py"]
