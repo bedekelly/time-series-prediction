@@ -1,6 +1,6 @@
 import pytest
 
-from lab.tree import Tree
+from tree import Tree
 
 
 def test_expression_length():

@@ -1,9 +1,9 @@
 from collections import OrderedDict
 
-from lab.evaluate_fitness import evaluate_fitness_against_data, load_training_data
-from lab.generation import create_random_nodes
-from lab.solution import Solution
-from lab.tree import Tree
+from evaluate_fitness import evaluate_fitness_against_data, load_training_data
+from generation import create_random_nodes
+from solution import Solution
+from tree import Tree
 
 
 def test_simple_fitness_evaluation():

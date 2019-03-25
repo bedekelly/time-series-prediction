@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from lab.solution import Solution
+from solution import Solution
 
 
 def test_evaluate_solution_fitness():

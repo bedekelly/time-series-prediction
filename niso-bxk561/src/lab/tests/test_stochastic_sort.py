@@ -1,4 +1,4 @@
-from lab.sorting import stochastic_sort
+from sorting import stochastic_sort
 
 
 class DummySolution:

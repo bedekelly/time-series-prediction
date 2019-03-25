@@ -1,9 +1,9 @@
 import random
 from random import randrange
 
-from lab.evaluate_fitness import evaluate_fitness_against_data
+from evaluate_fitness import evaluate_fitness_against_data
 
-from lab.tree import Tree
+from tree import Tree
 
 
 LENGTH_PENALTY = 0.0
@@ -38,7 +38,7 @@ class Solution:
         """
 
         # Prevent circular imports.
-        from lab.generation import create_random_node, MAX_DEPTH
+        from generation import create_random_node, MAX_DEPTH
 
         # Pick a random node and get its depth.
         random_index = randrange(len(self.expression_tree))

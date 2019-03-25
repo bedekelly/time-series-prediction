@@ -1,8 +1,8 @@
 import random
 from math import floor
 
-from lab.generation import generate_random_solutions
-from lab.sorting import stochastic_sort
+from generation import generate_random_solutions
+from sorting import stochastic_sort
 
 
 def breed(parents, mutation_crossover_ratio=0.5):

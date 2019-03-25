@@ -1,6 +1,6 @@
-from lab.parsing import parse
-from lab.math_functions import MATH_FUNCTIONS, lazy_evaluate
-from lab.data_functions import DATA_FUNCTIONS
+from parsing import parse
+from math_functions import MATH_FUNCTIONS, lazy_evaluate
+from data_functions import DATA_FUNCTIONS
 
 
 class Tree:

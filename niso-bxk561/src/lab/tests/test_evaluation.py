@@ -1,6 +1,8 @@
-from lab.tree import Tree
+from tree import Tree
 
 test_cases = {
+    ("1.5", ""): 1.5,
+    ("1.26199125402", ""): 1.26199125402,
     ("(add 1 2)", ""): 3,
     ("(sub 1 2)", ""): -1,
     ("(mul 2 4)", ""): 8,
@@ -60,3 +62,7 @@ test_cases = {
 def test_all_functions():
     for (expression, input_vector), result in test_cases.items():
         assert Tree(expression).evaluate(input_vector) == result
+
+
+if __name__ == "__main__":
+    test_all_functions()

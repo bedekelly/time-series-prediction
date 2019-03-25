@@ -1,9 +1,9 @@
 import random
 
-from lab.solution import Solution
-from lab.math_functions import MATH_FUNCTIONS
-from lab.data_functions import DATA_FUNCTIONS
-from lab.tree import Tree
+from solution import Solution
+from math_functions import MATH_FUNCTIONS
+from data_functions import DATA_FUNCTIONS
+from tree import Tree
 
 MAX_DEPTH = 5
 
