@@ -5,11 +5,14 @@ from function import Function
 
 
 def index(param, input_vector):
-    return floor(param) % (len(input_vector))
+    return abs(floor(param)) % len(input_vector)
 
 
 def data(param, input_vector):
-    return input_vector[index(param, input_vector)]
+    idx = index(param, input_vector)
+    print(f"Index for {param}: {idx}")
+    # print("Input vector", input_vector)
+    return input_vector[idx]
 
 
 def diff(param1, param2, input_vector=None):
@@ -26,7 +29,6 @@ def avg(param1, param2, input_vector=None):
     # Deal with index(n)'s upper bound.
     # if i2 == 0 and param2 >= 1:
     #     i2 = len(input_vector)
-    print(i1, i2)
     return mean(input_vector[i1:i2])
 
 
