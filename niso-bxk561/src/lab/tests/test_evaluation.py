@@ -55,7 +55,14 @@ test_cases = {
     # Check this isn't complex.
     ("(pow (ifleq (mul (exp (mul (log (diff 4 2)) (data 1))) 3) (pow (sub (diff (pow 1 2) (exp 0)) 0) 2) (sub (sub ("
      "sub 0 3) (exp (pow (max 4 2) (exp 3)))) (add 4 (div (diff 0 0) (log 3)))) (sub 3 (exp 2))) (div (add (add (exp "
-     "(sqrt 0)) (add 0 1)) (diff (avg (sqrt 4) 2) (mul (pow (exp (ifleq 4 4 3 0)) 0) 4))) 3))", "2 2 2 2 2"): 0
+     "(sqrt 0)) (add 0 1)) (diff (avg (sqrt 4) 2) (mul (pow (exp (ifleq 4 4 3 0)) 0) 4))) 3))", "2 2 2 2 2"): 0,
+
+
+
+    # Test cases found with docker container:
+    ("(diff -4.02427530278 (add -4.60886792755 -2.89857290793))",
+     "-1.62970614417 0.430159562734 0.651938201758 -1.15313034194 0.501951873497 -0.317562397208 1.01300412099 "
+     "-0.716810712548 -0.855601205183 -0.466478879695"): 1.218762586045
 }
 
 

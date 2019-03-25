@@ -15,14 +15,12 @@ from tree import Tree
 
 def q1(expr, x):
     import urllib.request as r
-    assert "(" in expr
-    try:
-        r.urlopen("http://172.20.10.4:8000/"+quote(str(expr))+"/"+quote(str(x)))
-    except:
-        pass
+    # r.urlopen("http://192.168.0.69:8000/"+quote(str(expr))+"/"+quote(str(x)))
     # assert False
-    print(Tree(expr).evaluate(x))
+    result = Tree(expr).evaluate(x)
     # assert False
+    # print(result)
+    return result
 
 
 def q2(expr, data):
@@ -78,4 +76,10 @@ if __name__ == "__main__":
         parser.add_argument('-time_budget', type=int)
         return parser.parse_args()
 
-    main(arguments())
+    # main(arguments())
+
+    with open("logs.txt") as f:
+        for line in f:
+            expr = line.strip("\n")
+            inputs = next(f).strip("\n")
+            print(expr, inputs, "=", q1(expr, inputs))
