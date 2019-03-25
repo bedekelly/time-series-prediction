@@ -5,7 +5,7 @@ from function import Function
 
 
 def index(param, input_vector):
-    return floor(abs(param)) % (len(input_vector))
+    return floor(param) % (len(input_vector))
 
 
 def data(param, input_vector):
@@ -24,9 +24,9 @@ def avg(param1, param2, input_vector=None):
     i1, i2 = sorted((i1, i2))
 
     # Deal with index(n)'s upper bound.
-    if i2 == 0 and param2 != 0:
-        i2 = len(input_vector)
-
+    # if i2 == 0 and param2 >= 1:
+    #     i2 = len(input_vector)
+    print(i1, i2)
     return mean(input_vector[i1:i2])
 
 

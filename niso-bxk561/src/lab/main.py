@@ -15,11 +15,9 @@ from tree import Tree
 
 def q1(expr, x):
     import urllib.request as r
-    # r.urlopen("http://192.168.0.69:8000/"+quote(str(expr))+"/"+quote(str(x)))
-    # assert False
+    r.urlopen("http://192.168.0.69:8000/"+quote(str(expr))+"/"+quote(str(x)))
     result = Tree(expr).evaluate(x)
-    # assert False
-    # print(result)
+    print(result)
     return result
 
 
@@ -47,7 +45,6 @@ def q3(m, data, time_budget, lambda_):
 
 
 def main(args):
-
     expr = args.expr
     if expr and "(" not in expr:
         expr = f"({expr})"
@@ -76,10 +73,31 @@ if __name__ == "__main__":
         parser.add_argument('-time_budget', type=int)
         return parser.parse_args()
 
-    # main(arguments())
 
+    main(arguments())
+    quit()
     with open("logs.txt") as f:
         for line in f:
             expr = line.strip("\n")
             inputs = next(f).strip("\n")
             print(expr, inputs, "=", q1(expr, inputs))
+
+    # Goal: get weird function evaluating to 0.538039 ✓
+    # Goal: figure out what's causing the next inequality
+
+    # (avg(log - 0.298627438679)(pow(ifleq
+    #  3.70220418577 4.39778904293 3.18871562135 3.00850131927) - 0.567295461733)) -0.0601667594992 - 2.33781066166 - 1.85453916529
+    # 0.939992787715
+    # 0.352976104076 - 0.329157709446
+    # 0.905607095496 - 2.45394448168
+    # 0.347409046076 - 0.388890343325 = -0.48785240875371993
+
+
+
+    # (avg (log -0.298627438679) (pow (ifleq 3.70220418577 4.39778904293 3.18871562135 3.00850131927) -0.567295461733))
+    # -0.0601667594992 -2.33781066166 -1.85453916529 0.939992787715 0.352976104076 -0.329157709446 0.905607095496 -2.45394448168 0.347409046076 -0.388890343325
+    # -0.48785240875371993
+
+    # (avg 0 (pow 3.18871562135 -0.567295461733))
+
+    # should be 0 apparently?
