@@ -15,12 +15,11 @@ def limited_pow(a, b):
     than 1024. This seems small, but note that 2 ** (2 ** 10) is a number
     309 digits long.
     """
-    if a == 0:
-        return 0
     if a == 1 or b == 0:
         return 1
+    if a == 0:
+        return 0
     if a > 2 ** 20 and b > 2 ** 10:
-        # raise ValueError()
         return 0
     return pow(a, b)
 
@@ -86,8 +85,8 @@ def lazy_evaluate(fn, params):
         elif params[1] == 1:
             return params[0]
     elif fn == "pow":
-        if params[0] == 0:
-            return 0
+        if params[1] == 0:
+            return 1
         if params[0] in (0, 1):
             return params[0]
     elif fn == "ifleq":
