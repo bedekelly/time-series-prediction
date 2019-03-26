@@ -5,7 +5,7 @@ from math_functions import MATH_FUNCTIONS
 from data_functions import DATA_FUNCTIONS
 from tree import Tree
 
-MAX_DEPTH = 5
+MAX_DEPTH = 10
 
 
 def random_number(hi=0, lo=0):

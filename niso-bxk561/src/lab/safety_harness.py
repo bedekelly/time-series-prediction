@@ -11,8 +11,8 @@ def _safety_harness(function):
             result = function(*args, **kwargs)
             if isinstance(result, complex):
                 result = 0
-            if result > 2 ** 20:
-                result = 2 ** 20
+            if result > 2 ** 24:
+                result = 2 ** 24
         except (ZeroDivisionError, ValueError, OverflowError, TypeError):
             pass
         return result

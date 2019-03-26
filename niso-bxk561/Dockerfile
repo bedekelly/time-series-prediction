@@ -21,6 +21,7 @@ ADD src /bin
 # RUN apt install -y curl
 # RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y pypy3
 
-# The final line specifies your username and how to start your program. # Replace abc123 with your real username and python /bin/abc123.py
+# The final line specifies your username and how to start your program.
+# Replace abc123 with your real username and python /bin/abc123.py
 # with what is required to start your program.
-CMD ["-username", "bxk561", "-submission", "python3 /bin/lab/main.py", "-questions", "1", "-verbose"]
+CMD ["-username", "bxk561", "-submission", "python3 /bin/lab/main.py", "-questions", "3", "-verbose"]
