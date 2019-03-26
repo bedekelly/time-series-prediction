@@ -19,6 +19,8 @@ def limited_pow(a, b):
         return 1
     if a == 0:
         return 0
+    if b > 32:
+        return a ** 32
     if a > 1024 and b > 1024:
         return 1024 ** 1024
     return pow(a, b)

@@ -1,4 +1,5 @@
 import random
+import time
 from math import floor
 
 from generation import generate_random_solutions
@@ -47,12 +48,20 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fract
     :return: The population of the final generation.
     """
 
-    population = generate_random_solutions(pop_size, input_size)
-    num_children = num_parents = floor(pop_size * fraction_parents)
+    if results_queue is None:
+        raise ValueError("Results queue not present!")
 
+    # now = time.perf_counter()
+    population = generate_random_solutions(pop_size, input_size, max_depth=5)
+    num_children = num_parents = floor(pop_size * fraction_parents)
+    # generated = time.perf_counter() - now
     for solution in population:
         solution.evaluate_fitness_against(training)
     best_so_far = population[0].simplify()
+    # print(f"Generating and evaluating solutions took {time.perf_counter() - now} seconds (of which {generated} was "
+    #       f"generating solutions.")
+
+    results_queue.put(best_so_far)
 
     for i in range(number_iterations):
         population = stochastic_sort(population)
@@ -65,10 +74,8 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fract
             better_fitness = solution.fitness < best_so_far.fitness
             same_fitness_simpler = solution.fitness == best_so_far.fitness and solution.length < best_so_far.length
             if better_fitness or same_fitness_simpler:
-                best_so_far = solution
-
-        if results_queue is not None:
-            results_queue.put(best_so_far)
+                best_so_far = solution.simplify()
+        results_queue.put(best_so_far)
 
         # Pick parents and breed to get children.
         parents = population[:num_parents]
@@ -76,8 +83,7 @@ def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fract
         for c in children:
             c.evaluate_fitness_against(training)
 
-        # - use crowding to replace similar individuals
-        # (for now, replace lowest ranked individuals)
+        # Replace lowest ranked individuals with children.
         population = population[:-num_children] + children
 
     return best_so_far

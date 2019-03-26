@@ -31,22 +31,22 @@ class Tree:
         :return: The tree's final evaluated value.
         """
         # If we're just an int wrapper, return the int.
-        if type(self._expression) is not tuple:
+        if not isinstance(self._expression, tuple):
             return self._expression
 
-        if type(input_vector) is str:
-            input_vector = tuple(float(x) for x in input_vector.strip().split())
+        # if type(input_vector) is str:
+        #     input_vector = tuple(float(x) for x in input_vector.strip().split())
 
         fun_key, *params = self._expression
-        params = [param.evaluate(input_vector) for param in params]
+        evaluated_params = (param.evaluate(input_vector) for param in params)
 
         if fun_key in MATH_FUNCTIONS:
             fun = MATH_FUNCTIONS[fun_key].fun
-            return fun(*params)
+            return fun(*evaluated_params)
 
         elif fun_key in DATA_FUNCTIONS:
             fun = DATA_FUNCTIONS[fun_key].fun
-            return fun(*params, input_vector)
+            return fun(*evaluated_params, input_vector)
 
         raise ValueError("Invalid function: ", fun_key)
 

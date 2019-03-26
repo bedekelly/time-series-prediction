@@ -1,12 +1,7 @@
 import argparse
-import os
 import queue
-import sys
-
 import time
 from threading import Thread
-from urllib.parse import quote
-from urllib.request import urlopen
 
 from evaluate_fitness import load_training_data
 from genetic_algorithm import genetic_algorithm
@@ -16,7 +11,6 @@ from tree import Tree
 
 def q1(expr, x):
     result = Tree(expr).evaluate(x)
-    # urlopen("http://192.168.0.69:8000/" + quote(str(expr)) + "/" + quote(str(x)))
     print(result)
     return result
 
@@ -27,19 +21,21 @@ def q2(expr, data):
 
 
 def q3(m, data, time_budget, lambda_):
+    start = time.perf_counter()
     # Load the training data specified.
     training_data = load_training_data(data)
 
     # Perform the genetic algorithm.
     results_queue = queue.LifoQueue()
     computation_thread = Thread(
-        target=lambda: genetic_algorithm(lambda_, m, 1000, training=training_data, results_queue=results_queue),
+        target=lambda: genetic_algorithm(lambda_, m, 2**100, training=training_data, results_queue=results_queue),
         daemon=True  # Allow exiting when the timer runs out.
     )
     computation_thread.start()
 
     # Wait max. of time-budget seconds for the algorithm to finish.
-    time.sleep(time_budget)
+
+    time.sleep(time_budget-(time.perf_counter() - start - 0.1))
     best = results_queue.get_nowait()
     print(best.tree)
 
@@ -80,12 +76,3 @@ if __name__ == "__main__":
     #         print(expr, " ", inputs, " =", q1(expr, inputs), sep='')
 
     main(arguments())
-
-    # Goal: fix inequality with "diff" ✓
-    # Goal: fix inequality with "avg" ✓
-    # Goal: fix new inequality with "avg" ✓
-    # Goal: fix weirdness with sqrt and exp
-
-    # Both expressions evaluate to 1 but should eval to 0?
-    # (exp(sqrt(div 0.562190566644 -0.398498003329)))
-    # (exp(sqrt(ifleq(log - 1.20026721969)(log - 0.561497497943)(log - 1.26052564441)(log - 1.21765353218))))

@@ -24,7 +24,7 @@ def create_random_node(depth=0, max_depth=MAX_DEPTH):
 
 
 def create_random_nodes(num_nodes, depth=0, max_depth=MAX_DEPTH):
-    return [create_random_node(depth, max_depth) for i in range(num_nodes)]
+    return [create_random_node(depth, max_depth) for _ in range(num_nodes)]
 
 
 def generate_random_solutions(n, input_size, max_depth=MAX_DEPTH):
@@ -35,5 +35,4 @@ def generate_random_solutions(n, input_size, max_depth=MAX_DEPTH):
     :param max_depth: The maximum depth of any expression tree.
     :return: A sequence of random, *valid* expressions.
     """
-    return [Solution(node) for node in create_random_nodes(n)]
-
+    return [Solution(node) for node in create_random_nodes(n, max_depth=max_depth)]
