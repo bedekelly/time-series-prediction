@@ -1,16 +1,15 @@
 import random
 
 
-def stochastic_sort(population, number_sweeps=1, wrong_choice=0.4):
+def stochastic_sort(population, number_sweeps, wrong_choice):
     """
     A simplified version of stochastic sort, where no penalties are enacted,
     but we make the wrong choice about whether to swap indices i and i+1
     with some probability. We scale the number of sweeps linearly with the
     size of the input.
     :param population: Ordered sequence of population.
-    :param number_sweeps: Number of iterations through the pseudo-bubble-sort algorithm,
-                          as a multiple of the size of input.
-    :param wrong_choice: Probabilty of choosing incorrectly whether to swap.
+    :param number_sweeps: Number of iterations through the pseudo-bubble-sort algorithm.
+    :param wrong_choice: Probability of choosing incorrectly whether to swap.
     :return: The population after applying stochastic-sort.
     """
     population = [p for p in population]
