@@ -35,8 +35,8 @@ def breed(parents, mutation_crossover_ratio, mutation_replacement_ratio):
     return children
 
 
-def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fraction_parents=0.1, p_simplify=0.01,
-                      training=None, results_queue=None, stop_flag=None, mutation_crossover_ratio=0.5,
+def genetic_algorithm(pop_size=100, input_size=100, number_iterations=100, fraction_parents=0.3, p_simplify=0.01,
+                      training=None, results_queue=None, stop_flag=None, mutation_crossover_ratio=0.2,
                       mutation_replacement_ratio=0.5, num_sweeps=3, wrong_choice=0.4):
     """
     Run an independent instance of the genetic algorithm.
