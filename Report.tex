@@ -5,6 +5,7 @@
 
  \title{Time Series Prediction with GP}
  \author{Bede Kelly}
+ \date{}
  \maketitle
 
 The basic genetic algorithm framework used is shown in \textbf{Algorithm 1}. It's a relatively simple genetic algorithm, with the addition of a ``simplify'' step --- with some probability, mathematical expressions like ``1 + 1'' or ``sqrt(log(55))'' will be evaluated and replaced with their result. This balances against the explosion of complexity introduced with mutation.\\
@@ -15,7 +16,9 @@ Mutation, shown in \textbf{Algorithm 3}, is achieved by creating a random expres
 
 Crossover is simpler (\textbf{Algorithm 4}), simply choosing a random index and swapping the subtrees of both parents at that index.\\
 
-Simplify is particularly implementation-specific, but the general idea may be described here. We recursively simplify all of an expression tree's parameters, then determine if they have all been fully evaluated without any reliance on external data; if so, find the suitable procedure to evaluate the root node's expression.
+`Simplify' is particularly implementation-specific and not suited to pseudocode, but the general idea may be described here. We recursively simplify all of an expression tree's parameters, then determine if they have all been fully evaluated without any reliance on external data; if so, find the suitable procedure to evaluate the root node's expression.\\
+
+In \textbf{Testing.html}, we demonstrate how tweaking parameters to these algorithms can optimise results for reliability and average fitness. This isn't in PDF format as it's the output of a Jupyter notebook. 
 
 \pagebreak
 
