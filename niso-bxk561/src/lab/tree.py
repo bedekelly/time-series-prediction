@@ -34,8 +34,8 @@ class Tree:
         if not isinstance(self._expression, tuple):
             return self._expression
 
-        # if type(input_vector) is str:
-        #     input_vector = tuple(float(x) for x in input_vector.strip().split())
+        if type(input_vector) is str:
+            input_vector = tuple(float(x) for x in input_vector.strip().split())
 
         fun_key, *params = self._expression
         evaluated_params = (param.evaluate(input_vector) for param in params)
